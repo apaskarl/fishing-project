@@ -12,6 +12,8 @@ const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [isChecked, setIsChecked] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -73,7 +75,7 @@ const SignIn = () => {
                       />
                       <label htmlFor="email">Email or phone</label>
                     </div>
-                    <span className="text-blue text-sm font-medium hover:underline">
+                    <span className="text-blue cursor-pointer text-sm font-medium hover:underline">
                       Forgot email?
                     </span>
                   </div>
@@ -96,7 +98,7 @@ const SignIn = () => {
                   <div className="mb-10 space-y-2">
                     <div className="input-container w-full">
                       <input
-                        type="password"
+                        type={isChecked ? "text" : "password"}
                         id="password"
                         placeholder=""
                         required
@@ -107,10 +109,20 @@ const SignIn = () => {
                     </div>
 
                     {/* Show password checkbox */}
-                    <label className="flex items-center gap-x-2 text-sm font-medium hover:underline">
+                    <label className="flex cursor-pointer items-center gap-x-2 text-sm font-medium">
                       <input
                         type="checkbox"
-                        className="bg-dark border-border size-3 appearance-none border"
+                        className={`border-border size-4 appearance-none rounded-[2px] border duration-200 ${
+                          isChecked ? "bg-blue" : "bg-dark"
+                        }`}
+                        checked={isChecked}
+                        onChange={() => {
+                          setIsChecked(!isChecked);
+                        }}
+                      />
+                      <Icon
+                        icon="iconamoon:check-bold"
+                        className="text-dark absolute"
                       />
                       Show password
                     </label>
@@ -147,7 +159,7 @@ const Button = ({ type, onClick }) => {
       <button
         onClick={onClick}
         type={type}
-        className="bg-blue text-dark flex rounded-full px-6 py-2 text-sm font-semibold"
+        className="bg-blue text-dark hover:bg-blue-light flex cursor-pointer rounded-full px-6 py-2 text-sm font-semibold duration-200"
       >
         Next
       </button>
