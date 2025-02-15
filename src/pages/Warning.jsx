@@ -1,7 +1,7 @@
 import React from "react";
 import haha from "../assets/haha.jpg";
 
-const Home = () => {
+const Warning = () => {
   return (
     <div className="text-light bg-dark flex min-h-screen flex-col items-center justify-center gap-5 p-6">
       <img src={haha} alt="Hahahaha" className="size-56" />
@@ -12,4 +12,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Warning;
