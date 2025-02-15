@@ -13,7 +13,7 @@ const Warning = () => {
           <Icon icon="ion:warning-sharp" className="size-10 text-yellow-500" />
         </div>
 
-        <h2 className="text-2xl font-semibold">Phishing Awareness</h2>
+        <h2 className="text-2xl font-semibold">Phishing Scam Awareness</h2>
       </div>
 
       {/* Message */}
