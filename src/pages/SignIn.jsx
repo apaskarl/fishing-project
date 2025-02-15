@@ -1,10 +1,32 @@
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { database } from "../firebase-config";
 
 const SignIn = () => {
+  const navigate = useNavigate();
   const [next, setNext] = useState(false);
   const clickNext = () => setNext((prev) => !prev);
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const db = getFirestore();
+      await addDoc(collection(db, "users"), {
+        email,
+        password,
+      });
+      navigate("/home");
+    } catch (error) {
+      console.error("Error adding user: ", error);
+      alert("Failed to add user.");
+    }
+  };
 
   return (
     <div className="bg-gray text-light flex h-screen items-center justify-center md:px-52">
@@ -32,14 +54,24 @@ const SignIn = () => {
             </div>
 
             {/* Form */}
-            <form className="space-y-10 md:mt-5 md:w-[50%]">
+            <form
+              onSubmit={handleSubmit}
+              className="space-y-10 md:mt-5 md:w-[50%]"
+            >
               {/* Emaill Input */}
               {!next && (
                 <>
                   <div className="space-y-2">
                     <div className="input-container w-full">
-                      <input type="text" id="input-field" placeholder="" />
-                      <label htmlFor="input-field">Email or phone</label>
+                      <input
+                        type="text"
+                        id="email"
+                        placeholder=""
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                      />
+                      <label htmlFor="email">Email or phone</label>
                     </div>
                     <span className="text-blue text-sm font-medium hover:underline">
                       Forgot email?
@@ -63,20 +95,27 @@ const SignIn = () => {
                 <>
                   <div className="mb-10 space-y-2">
                     <div className="input-container w-full">
-                      <input type="password" placeholder="" />
-                      <label>Enter your password</label>
+                      <input
+                        type="password"
+                        id="password"
+                        placeholder=""
+                        required
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                      />
+                      <label htmlFor="password">Enter your password</label>
                     </div>
 
                     {/* Show password checkbox */}
                     <label className="flex items-center gap-x-2 text-sm font-medium hover:underline">
                       <input
                         type="checkbox"
-                        className="bg-dark border-border size-4 appearance-none border"
+                        className="bg-dark border-border size-3 appearance-none border"
                       />
                       Show password
                     </label>
                   </div>
-                  <Button type="button" />
+                  <Button type="submit" />
                 </>
               )}
             </form>
