@@ -1,13 +1,13 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBQ_-7GdOHgKUp5tnUensBN_aN9TAfPxcc",
-  authDomain: "fishing-project-cc943.firebaseapp.com",
-  projectId: "fishing-project-cc943",
-  storageBucket: "fishing-project-cc943.firebasestorage.app",
-  messagingSenderId: "581797717987",
-  appId: "1:581797717987:web:73b63f320bcf0bff1622d6",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);

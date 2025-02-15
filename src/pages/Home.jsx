@@ -1,7 +1,7 @@
 import React from "react";
 import haha from "../assets/haha.jpg";
 
-const Message = () => {
+const Home = () => {
   return (
     <div className="text-light bg-dark flex min-h-screen flex-col items-center justify-center gap-5 p-6">
       <img src={haha} alt="Hahahaha" className="size-56" />
@@ -12,4 +12,4 @@ const Message = () => {
   );
 };
 
-export default Message;
+export default Home;
