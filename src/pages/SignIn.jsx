@@ -18,7 +18,7 @@ const SignIn = () => {
     setTimeout(() => {
       setNext((prev) => !prev);
       setLoading(false);
-    }, 2500);
+    }, 2000);
   };
 
   const handleSubmit = async (e) => {
@@ -27,7 +27,7 @@ const SignIn = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-    }, 2500);
+    }, 2000);
 
     try {
       const db = getFirestore();
@@ -139,7 +139,7 @@ const SignIn = () => {
                       </div>
 
                       {/* Show password checkbox */}
-                      <label className="flex cursor-pointer items-center gap-x-4 text-sm font-medium">
+                      <label className="flex w-max cursor-pointer items-center gap-x-4 text-sm font-medium">
                         <input
                           type="checkbox"
                           className={`size-4 appearance-none rounded-[2px] border-2 duration-200 ${
