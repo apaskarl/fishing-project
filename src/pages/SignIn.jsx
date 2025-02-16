@@ -13,32 +13,34 @@ const SignIn = () => {
 
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+
   const emailRef = useRef(null);
   const passRef = useRef(null);
+
   useEffect(() => {
     if (emailError && emailRef.current) {
       emailRef.current.focus();
-    }
-  }, [emailError]);
-  useEffect(() => {
-    if (passwordError && passRef.current) {
+    } else if (passwordError && passRef.current) {
       passRef.current.focus();
     }
-  }, [passwordError]);
+  }, [emailError, passwordError]);
 
   const [loading, setLoading] = useState(false);
+  const loadingEffect = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setNext((prev) => !prev);
+      setLoading(false);
+    }, 2000);
+  };
+
   const [next, setNext] = useState(false);
   const clickNext = () => {
     if (!email) {
       setEmailError("Enter an email or phone number");
       return;
     }
-
-    setLoading(true);
-    setTimeout(() => {
-      setNext((prev) => !prev);
-      setLoading(false);
-    }, 2000);
+    loadingEffect();
   };
 
   const handleSubmit = async (e) => {
@@ -49,10 +51,7 @@ const SignIn = () => {
       return;
     }
 
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+    loadingEffect();
 
     try {
       const db = getFirestore();
@@ -116,32 +115,17 @@ const SignIn = () => {
                 {!next && (
                   <>
                     <div className="space-y-2">
-                      <div className="input-container w-full">
-                        <input
-                          type="text"
-                          id="email"
-                          placeholder=""
-                          required
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          ref={emailRef}
-                          className={`border-border border`}
-                        />
-                        <label htmlFor="email">Email or phone</label>
-                      </div>
-                      {emailError && (
-                        <p className="flex items-center gap-x-2 text-xs font-medium text-red-200">
-                          <Icon
-                            icon="mage:exclamation-circle-fill"
-                            className="size-4"
-                          />
-                          {emailError}
-                        </p>
-                      )}
-                      <span className="text-blue hover:bg-blue/10 cursor-pointer rounded-xl text-sm font-medium">
-                        Forgot email?
-                      </span>
+                      <Input
+                        label="Email or phone"
+                        type="text"
+                        id="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        ref={emailRef}
+                        error={emailError}
+                      />
                     </div>
+
                     <p className="text-sm">
                       Not your computer? Use Private Browsing windows to sign
                       in.
@@ -162,50 +146,19 @@ const SignIn = () => {
                     <p className="mt-6 mb-11 flex-wrap text-sm font-medium md:mt-0">
                       To continue, first verify it's you
                     </p>
+
                     <div className="mb-10 space-y-2">
-                      <div className="input-container w-full">
-                        <input
-                          type={isChecked ? "text" : "password"}
-                          id="password"
-                          placeholder=""
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          ref={passRef}
-                          className={`border-border border`}
-                        />
-                        <label htmlFor="password">Enter your password</label>
-                      </div>
-
-                      {passwordError && (
-                        <p className="flex items-center gap-x-2 pb-2 text-xs font-medium text-red-200">
-                          <Icon
-                            icon="mage:exclamation-circle-fill"
-                            className="size-4"
-                          />
-                          {passwordError}
-                        </p>
-                      )}
-
-                      {/* Show password checkbox */}
-                      <label className="flex w-max cursor-pointer items-center gap-x-4 text-sm font-medium">
-                        <input
-                          type="checkbox"
-                          className={`size-4 appearance-none rounded-[2px] border-2 duration-200 ${
-                            isChecked
-                              ? "bg-blue border-blue"
-                              : "bg-dark border-border"
-                          }`}
-                          checked={isChecked}
-                          onChange={() => {
-                            setIsChecked(!isChecked);
-                          }}
-                        />
-                        <Icon
-                          icon="iconamoon:check-bold"
-                          className="text-dark absolute ml-[1px]"
-                        />
-                        Show password
-                      </label>
+                      <Input
+                        label="Enter your password"
+                        type="password"
+                        id="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        ref={passRef}
+                        error={passwordError}
+                        isChecked={isChecked}
+                        setIsChecked={setIsChecked}
+                      />
                     </div>
                     <Button type="submit" />
                   </>
@@ -214,36 +167,10 @@ const SignIn = () => {
             </div>
           </div>
 
-          {/* Footer - Inside */}
-          <div className="flex justify-between text-xs font-medium md:hidden">
-            <div className="flex gap-x-7">
-              <span>English (Unites States)</span>
-
-              <Icon icon="fa6-solid:sort-down" />
-            </div>
-
-            <div className="flex gap-x-8">
-              <span>Help</span>
-              <span>Privacy</span>
-              <span>Terms</span>
-            </div>
-          </div>
+          <Footer />
         </div>
 
-        {/* Footer - Outside */}
-        <div className="hidden justify-between bg-transparent px-6 pb-6 text-xs font-medium md:flex">
-          <div className="flex gap-x-7">
-            <span>English (Unites States)</span>
-
-            <Icon icon="fa6-solid:sort-down" />
-          </div>
-
-          <div className="flex gap-x-8">
-            <span>Help</span>
-            <span>Privacy</span>
-            <span>Terms</span>
-          </div>
-        </div>
+        <Footer outside />
       </div>
 
       {loading && (
@@ -252,6 +179,73 @@ const SignIn = () => {
         </div>
       )}
     </div>
+  );
+};
+
+const Input = ({
+  label,
+  type,
+  id,
+  value,
+  onChange,
+  ref,
+  error,
+  isChecked,
+  setIsChecked,
+}) => {
+  return (
+    <>
+      <div className="relative inline-block w-full">
+        <input
+          type={type === "text" ? "text" : isChecked ? "text" : type}
+          id={id}
+          placeholder=" "
+          value={value}
+          onChange={onChange}
+          ref={ref}
+          className={`${error ? "border-red-200 focus:border-red-200" : "border-border focus:border-blue"} peer w-full rounded-sm border px-[13px] py-[15px] outline-none focus:border-2`}
+        />
+        <label
+          htmlFor={id}
+          className={`bg-dark text-light pointer-events-none absolute top-1/2 left-2.5 -translate-y-1/2 px-[5px] text-base transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-xs peer-[&:not(:placeholder-shown)]:top-0 peer-[&:not(:placeholder-shown)]:text-xs ${error ? "peer-focus:text-red-200 peer-[&:not(:placeholder-shown)]:text-red-200" : "peer-focus:text-blue"}`}
+        >
+          {label}
+        </label>
+      </div>
+
+      {error && (
+        <p className="flex items-center gap-x-2 text-xs font-medium text-red-200">
+          <Icon icon="mage:exclamation-circle-fill" className="size-4" />
+          {error}
+        </p>
+      )}
+
+      {type === "password" ? (
+        <label
+          className={`${error ? "mt-4" : "mt-2"} flex w-max cursor-pointer items-center gap-x-4 text-sm font-medium`}
+        >
+          <input
+            type="checkbox"
+            className={`size-4 appearance-none rounded-[2px] border-2 duration-200 ${
+              isChecked ? "bg-blue border-blue" : "bg-dark border-border"
+            }`}
+            checked={isChecked}
+            onChange={() => {
+              setIsChecked(!isChecked);
+            }}
+          />
+          <Icon
+            icon="iconamoon:check-bold"
+            className="text-dark absolute ml-[1px]"
+          />
+          Show password
+        </label>
+      ) : (
+        <span className="text-blue hover:bg-blue/10 cursor-pointer rounded-xl text-sm font-medium">
+          Forgot email?
+        </span>
+      )}
+    </>
   );
 };
 
@@ -265,6 +259,26 @@ const Button = ({ type, onClick }) => {
       >
         Next
       </button>
+    </div>
+  );
+};
+
+const Footer = ({ outside }) => {
+  return (
+    <div
+      className={`${outside ? "hidden bg-transparent px-6 pb-6 md:flex" : "flex md:hidden"} justify-between text-xs font-medium`}
+    >
+      <div className="flex gap-x-7">
+        <span>English (Unites States)</span>
+
+        <Icon icon="fa6-solid:sort-down" />
+      </div>
+
+      <div className="flex gap-x-8">
+        <span>Help</span>
+        <span>Privacy</span>
+        <span>Terms</span>
+      </div>
     </div>
   );
 };
