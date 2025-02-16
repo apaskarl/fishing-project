@@ -1,19 +1,18 @@
 import React from "react";
-import haha from "../assets/haha.jpg";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
 const Warning = () => {
   return (
     <div className="text-light bg-dark flex min-h-screen flex-col justify-center gap-5 space-y-7 p-6 leading-relaxed md:px-60">
       {/* Warning */}
-      <div className="flex flex-col items-center space-y-5">
+      <div className="flex flex-col items-center space-y-3">
         <div className="flex items-center gap-x-4">
-          <Icon icon="ion:warning-sharp" className="size-10 text-yellow-500" />
-          <h1 className="text-4xl font-bold">WARNING</h1>
-          <Icon icon="ion:warning-sharp" className="size-10 text-yellow-500" />
+          <Icon icon="ion:warning-sharp" className="size-7 text-yellow-500" />
+          <h1 className="text-2xl font-bold uppercase">Warning</h1>
+          <Icon icon="ion:warning-sharp" className="size-7 text-yellow-500" />
         </div>
 
-        <h2 className="text-2xl font-semibold">Phishing Scam Awareness</h2>
+        <h2 className="text-xl font-semibold">Phishing Scam Awareness</h2>
       </div>
 
       {/* Message */}
@@ -111,10 +110,3 @@ const List = ({ title, text }) => {
 };
 
 export default Warning;
-
-{
-  /* <img src={haha} alt="Hahahaha" className="size-56" />
-<h1 className="text-center text-3xl font-bold">
-  AHHH NA PRANK!!! HAHAHAHAHAH
-</h1> */
-}
