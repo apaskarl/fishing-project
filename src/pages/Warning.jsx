@@ -97,10 +97,10 @@ const Warning = () => {
 
 const List = ({ title, text }) => {
   return (
-    <li className="flex items-start gap-4 text-gray-400">
+    <li className="flex items-start gap-3 text-gray-400">
       <Icon
         icon="material-symbols:check-box"
-        className="size-7 flex-shrink-0 text-green-500"
+        className="size-6 flex-shrink-0 text-green-500"
       />
       <span>
         <span className="text-light font-semibold">{title}</span>

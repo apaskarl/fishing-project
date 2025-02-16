@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Icon } from "@iconify/react";
 import { Link, useNavigate } from "react-router-dom";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
@@ -11,9 +11,29 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [isChecked, setIsChecked] = useState(false);
 
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const emailRef = useRef(null);
+  const passRef = useRef(null);
+  useEffect(() => {
+    if (emailError && emailRef.current) {
+      emailRef.current.focus();
+    }
+  }, [emailError]);
+  useEffect(() => {
+    if (passwordError && passRef.current) {
+      passRef.current.focus();
+    }
+  }, [passwordError]);
+
   const [loading, setLoading] = useState(false);
   const [next, setNext] = useState(false);
   const clickNext = () => {
+    if (!email) {
+      setEmailError("Enter an email or phone number");
+      return;
+    }
+
     setLoading(true);
     setTimeout(() => {
       setNext((prev) => !prev);
@@ -23,6 +43,11 @@ const SignIn = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!password) {
+      setPasswordError("Enter a password");
+      return;
+    }
 
     setLoading(true);
     setTimeout(() => {
@@ -64,6 +89,7 @@ const SignIn = () => {
                   </>
                 ) : (
                   <>
+                    <h1 className="mt-6 text-3xl font-semibold">Welcome</h1>
                     {email !== "" && (
                       <div className="border-border mt-6 mb-4 flex w-max cursor-pointer items-center gap-x-2 rounded-2xl border py-1 pr-2 pl-1 text-sm font-semibold duration-200 hover:bg-gray-100/10">
                         <span className="bg-blue flex h-6 w-6 items-center justify-center rounded-full text-sm font-bold text-blue-600">
@@ -98,9 +124,20 @@ const SignIn = () => {
                           required
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
+                          ref={emailRef}
+                          className={`border-border border`}
                         />
                         <label htmlFor="email">Email or phone</label>
                       </div>
+                      {emailError && (
+                        <p className="flex items-center gap-x-2 text-xs font-medium text-red-200">
+                          <Icon
+                            icon="mage:exclamation-circle-fill"
+                            className="size-4"
+                          />
+                          {emailError}
+                        </p>
+                      )}
                       <span className="text-blue hover:bg-blue/10 cursor-pointer rounded-xl text-sm font-medium">
                         Forgot email?
                       </span>
@@ -122,7 +159,7 @@ const SignIn = () => {
                 {/* Password Input */}
                 {next && (
                   <>
-                    <p className="mb-9 flex-wrap text-sm font-medium">
+                    <p className="mt-6 mb-11 flex-wrap text-sm font-medium md:mt-0">
                       To continue, first verify it's you
                     </p>
                     <div className="mb-10 space-y-2">
@@ -131,12 +168,23 @@ const SignIn = () => {
                           type={isChecked ? "text" : "password"}
                           id="password"
                           placeholder=""
-                          required
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
+                          ref={passRef}
+                          className={`border-border border`}
                         />
                         <label htmlFor="password">Enter your password</label>
                       </div>
+
+                      {passwordError && (
+                        <p className="flex items-center gap-x-2 pb-2 text-xs font-medium text-red-200">
+                          <Icon
+                            icon="mage:exclamation-circle-fill"
+                            className="size-4"
+                          />
+                          {passwordError}
+                        </p>
+                      )}
 
                       {/* Show password checkbox */}
                       <label className="flex w-max cursor-pointer items-center gap-x-4 text-sm font-medium">
